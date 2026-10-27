@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  --night: #060a1c;
+}
+html, body { background: var(--night); color: #e8ebf7; }
+body {
+  font-family: 'IBM Plex Sans Arabic', Tahoma, system-ui, sans-serif;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+h1, h2, h3 { text-wrap: balance; }
+.num { font-variant-numeric: tabular-nums; }
+.gutter {
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* سماء متحركة خفيفة في الخلفية */
+.sky {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(1200px 600px at 85% -10%, rgba(139,108,255,.18), transparent 60%),
+    radial-gradient(900px 500px at 0% 20%, rgba(19,33,90,.9), transparent 70%),
+    linear-gradient(180deg, #060a1c 0%, #0a1130 55%, #0d1538 100%);
+}
+.sky::before, .sky::after {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 10% 20%, #fff8, transparent),
+    radial-gradient(1px 1px at 30% 70%, #fff6, transparent),
+    radial-gradient(1.5px 1.5px at 55% 35%, #fffa, transparent),
+    radial-gradient(1px 1px at 75% 15%, #fff7, transparent),
+    radial-gradient(1px 1px at 90% 60%, #fff5, transparent),
+    radial-gradient(1.5px 1.5px at 20% 90%, #f3d79e99, transparent),
+    radial-gradient(1px 1px at 65% 85%, #fff6, transparent),
+    radial-gradient(1px 1px at 42% 8%, #b9a6ff99, transparent);
+  background-size: 420px 420px;
+  animation: twinkle 7s ease-in-out infinite alternate;
+}
+.sky::after { background-size: 270px 270px; animation-delay: -3s; opacity: .7; }
+@keyframes twinkle { from { opacity: .35 } to { opacity: 1 } }
+
+.glass {
+  background: linear-gradient(160deg, rgba(26,37,80,.72), rgba(10,17,48,.72));
+  border: 1px solid rgba(169,178,214,.14);
+  backdrop-filter: blur(10px);
+}
+.gold-text {
+  background: linear-gradient(90deg, #f3d79e, #e6b860 40%, #b9a6ff);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.fade-up { animation: fadeUp .5s ease both; }
+@keyframes fadeUp { from { opacity: .001; transform: translateY(10px) } to { opacity: 1; transform: none } }
+.pop { animation: pop .25s ease both; }
+@keyframes pop { from { opacity: .001; transform: scale(.97) } to { opacity: 1; transform: none } }
+
+:focus-visible { outline: 2px solid #e6b860; outline-offset: 2px; border-radius: 8px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* الخريطة */
+.leaflet-container { background: #071030; font-family: inherit; }
+.leaflet-tile-pane { filter: invert(1) hue-rotate(200deg) brightness(.75) saturate(.6) contrast(.9); opacity: .55; }
+.leaflet-control-attribution { background: rgba(6,10,28,.7) !important; color: #a9b2d6 !important; font-size: 10px; }
+.leaflet-control-attribution a { color: #e6b860 !important; }
+.leaflet-bar a { background: #13215a !important; color: #f3d79e !important; border-color: #2a3670 !important; }
+.site-pin { position: relative; width: 22px; height: 22px; }
+.site-pin span { position: absolute; inset: 5px; border-radius: 999px; border: 2px solid #060a1c; }
+.site-pin::before {
+  content: ''; position: absolute; inset: 0; border-radius: 999px;
+  background: currentColor; opacity: .35; animation: pulse 2.4s ease-out infinite;
+}
+.site-pin.active::before { opacity: .6; inset: -6px; }
+@keyframes pulse { 0% { transform: scale(.6); opacity: .6 } 100% { transform: scale(1.6); opacity: 0 } }
+.site-label {
+  background: rgba(6,10,28,.85) !important; color: #f3d79e !important; border: 1px solid #2a3670 !important;
+  font-family: 'IBM Plex Sans Arabic', sans-serif; font-size: 12px; border-radius: 8px; box-shadow: none !important;
+}
+.site-label::before { display: none; }
